@@ -12,6 +12,9 @@
   <modules>
     <module>alpakka-cassandra</module>
     <module>persistent-actor</module>
+    <module>basic-actors</module>
+    <module>cluster</module>
+    <module>akka-http-jwt</module>
   </modules>
 
   <properties>
