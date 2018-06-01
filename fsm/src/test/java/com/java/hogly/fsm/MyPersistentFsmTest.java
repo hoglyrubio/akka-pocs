@@ -1,15 +1,18 @@
 package com.java.hogly.fsm;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.Status;
 import akka.testkit.javadsl.TestKit;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
-public class MyFsmTest {
+import java.util.UUID;
+
+public class MyPersistentFsmTest {
 
   private static ActorSystem system;
 
@@ -28,23 +31,11 @@ public class MyFsmTest {
   public void shouldProcessAllSteps() {
     new TestKit(system) {
       {
-        Props props = Props.create(MyFsm.class, () -> new MyFsm(getRef()));
+        String id = "12345"; //UUID.randomUUID().toString();
+        Props props = Props.create(MyPersistentFsm.class, () -> new MyPersistentFsm(id, getRef()));
         ActorRef myFsm = system.actorOf(props);
         send(myFsm, new MyFsmMessages.StartProcess());
         expectMsgClass(Status.Success.class);
-      }
-    };
-  }
-
-  @Test
-  public void shouldFailBecauseMessageUnexpected() {
-    new TestKit(system) {
-      {
-        Props props = Props.create(MyFsm.class, () -> new MyFsm(getRef()));
-        ActorRef myFsm = system.actorOf(props, "my-sick-fsm");
-        send(myFsm, new MyFsmMessages.Step1Finished());
-        expectMsgClass(Status.Failure.class);
-        //send(myFsm, new MyFsmMessages.StartProcess());
       }
     };
   }

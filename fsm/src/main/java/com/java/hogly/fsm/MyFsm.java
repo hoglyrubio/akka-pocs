@@ -1,13 +1,11 @@
 package com.java.hogly.fsm;
 
 import akka.Done;
-import akka.actor.AbstractFSM;
+import akka.actor.AbstractLoggingFSM;
 import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import akka.actor.Props;
 import akka.actor.Status;
 
-public class MyFsm extends AbstractFSM<MyFsmState, MyFsmData> {
+public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
 
   private static ActorRef parentActor;
 
@@ -18,30 +16,30 @@ public class MyFsm extends AbstractFSM<MyFsmState, MyFsmData> {
   {
     startWith(MyFsmState.IDLE, new MyFsmData("I'm idle"));
 
-    when(MyFsmState.IDLE, matchEvent(MyFsmMessages.StartProcess.class, (msg, data) -> {
-      log().info("Incoming: msg {} data {}. stateData: {} stateName: {}", msg, data, stateData(), stateName());
+    when(MyFsmState.IDLE, matchEvent(MyFsmMessages.StartProcess.class, (event, data) -> {
+      log().info("Incoming: event {} data {}. stateData: {} stateName: {}", event, data, stateData(), stateName());
       return goTo(MyFsmState.STEP_1).using(new MyFsmData("I'm in step 1"));
     }));
 
-    when(MyFsmState.STEP_1, matchEvent(MyFsmMessages.Step1Finished.class, (msg, data) -> {
-      log().info("Incoming: msg {} data {}. stateData: {} stateName: {}", msg, data, stateData(), stateName());
+    when(MyFsmState.STEP_1, matchEvent(MyFsmMessages.Step1Finished.class, (event, data) -> {
+      log().info("Incoming: event {} data {}. stateData: {} stateName: {}", event, data, stateData(), stateName());
       return goTo(MyFsmState.STEP_2).using(new MyFsmData("I'm in step 2"));
     }));
 
-    when(MyFsmState.STEP_2, matchEvent(MyFsmMessages.Step2Finished.class, (msg, data) -> {
-      log().info("Incoming: msg {} data {}. stateData(): {} stateName(): {}", msg, data, stateData(), stateName());
+    when(MyFsmState.STEP_2, matchEvent(MyFsmMessages.Step2Finished.class, (event, data) -> {
+      log().info("Incoming: event {} data {}. stateData(): {} stateName(): {}", event, data, stateData(), stateName());
       return goTo(MyFsmState.DONE).using(new MyFsmData("I'm Done"));
     }));
 
-    when(MyFsmState.DONE, matchEvent(Done.class, (msg, data) -> {
-      log().info("Incoming: msg {} data {}. stateData(): {} stateName(): {}", msg, data, stateData(), stateName());
+    when(MyFsmState.DONE, matchEvent(Done.class, (event, data) -> {
+      log().info("Incoming: event {} data {}. stateData(): {} stateName(): {}", event, data, stateData(), stateName());
       log().info("Finished work, stopping FSM");
       parentActor.tell(new Status.Success(data), self());
       return stop();
     }));
 
-    whenUnhandled(matchAnyEvent((msg, data) -> {
-      log().error("ERROR Incoming: msg {} data {}. stateData(): {} stateName(): {}", msg, data, stateData(), stateName());
+    whenUnhandled(matchAnyEvent((event, data) -> {
+      log().error("ERROR Incoming: event {} data {}. stateData(): {} stateName(): {}", event, data, stateData(), stateName());
       parentActor.tell(new Status.Failure(new RuntimeException("Some error")), self());
       return goTo(MyFsmState.FAILED);
     }));
@@ -62,15 +60,31 @@ public class MyFsm extends AbstractFSM<MyFsmState, MyFsmData> {
               log().info("Finishing work on FSM");
               self().tell(Done.getInstance(), self());
             })
+            .state(MyFsmState.IDLE, MyFsmState.FAILED, () -> {
+              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+            })
+            .state(MyFsmState.STEP_1, MyFsmState.FAILED, () -> {
+              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+            })
+            .state(MyFsmState.STEP_2, MyFsmState.FAILED, () -> {
+              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+            })
             .build()
+    );
+
+    onTermination(
+            matchStop(Normal(), (state, data) -> {
+              log().warning("onTermination. Normal() state: {} data: {}", state, data);
+            })
+            .stop(Shutdown(), (state, data) -> {
+              log().warning("onTermination. Shutdown() state: {} data: {}", state, data);
+            })
+            .stop(Failure.class, (reason, state, data) -> {
+              log().warning("onTermination. reason: {} state: {} data: {}", reason, state, data);
+            })
     );
 
     initialize();
   }
 
-  public static void main(String[] args) {
-    ActorSystem system = ActorSystem.create();
-    ActorRef myFsm = system.actorOf(Props.create(MyFsm.class));
-    myFsm.tell(new MyFsmMessages.StartProcess(), ActorRef.noSender());
-  }
 }
