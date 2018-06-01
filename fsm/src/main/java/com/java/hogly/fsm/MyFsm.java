@@ -5,8 +5,15 @@ import akka.actor.AbstractFSM;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.actor.Status;
 
 public class MyFsm extends AbstractFSM<MyFsmState, MyFsmData> {
+
+  private static ActorRef parentActor;
+
+  public MyFsm(ActorRef parentActor) {
+    this.parentActor = parentActor;
+  }
 
   {
     startWith(MyFsmState.IDLE, new MyFsmData("I'm idle"));
@@ -29,11 +36,13 @@ public class MyFsm extends AbstractFSM<MyFsmState, MyFsmData> {
     when(MyFsmState.DONE, matchEvent(Done.class, (msg, data) -> {
       log().info("Incoming: msg {} data {}. stateData(): {} stateName(): {}", msg, data, stateData(), stateName());
       log().info("Finished work, stopping FSM");
+      parentActor.tell(new Status.Success(data), self());
       return stop();
     }));
 
     whenUnhandled(matchAnyEvent((msg, data) -> {
       log().error("ERROR Incoming: msg {} data {}. stateData(): {} stateName(): {}", msg, data, stateData(), stateName());
+      parentActor.tell(new Status.Failure(new RuntimeException("Some error")), self());
       return goTo(MyFsmState.FAILED);
     }));
 
