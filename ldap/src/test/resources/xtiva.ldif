@@ -1,0 +1,4 @@
+dn: dc=xtiva,dc=com
+objectClass: domain
+objectClass: top
+dc: xtiva
