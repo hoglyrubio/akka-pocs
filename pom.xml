@@ -17,6 +17,8 @@
     <module>akka-http-jwt</module>
     <module>DSEGraph</module>
     <module>ldap</module>
+    <module>dse-graph</module>
+    <module>fsm</module>
   </modules>
 
   <properties>
