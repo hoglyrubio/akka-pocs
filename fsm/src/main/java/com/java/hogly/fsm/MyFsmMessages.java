@@ -56,7 +56,7 @@ public class MyFsmMessages implements Serializable {
   public static class ProcessFinished extends MyFsmMessages {
     @Override
     public String toString() {
-      return "StartProcess{}";
+      return "ProcessFinished{}";
     }
   }
 }

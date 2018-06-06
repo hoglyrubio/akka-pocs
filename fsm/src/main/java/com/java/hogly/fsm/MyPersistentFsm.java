@@ -22,9 +22,14 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
             matchEvent(MyFsmMessages.StartProcess.class, (event, data) -> goTo(MyFsmState.STEP_1)
                     .applying(new MyFsmMessages.Step1Started())
                     .andThen(exec(currentData -> {
+                      log().info("andThen: event {} data {}. stateData: {} stateName: {}", event, data, stateData(), stateName());
                       worker.tell(new MyFsmMessages.StartStep1(), self());
                     }))
             )
+            .anyEvent((event, data) -> {
+              log().info("Unknown event: {} {}", event, data);
+              return stay();
+            })
     );
 
     when(MyFsmState.STEP_1,
@@ -35,6 +40,10 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
                       worker.tell(new MyFsmMessages.StartStep2(), self());
                     }))
             )
+            .anyEvent((event, data) -> {
+              log().info("Unknown event: {} {}", event, data);
+              return stay();
+            })
     );
 
     when(MyFsmState.STEP_2,
@@ -45,16 +54,36 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
                       self().tell(new MyFsmMessages.ProcessFinished(), self());
                     }))
             )
+            .anyEvent((event, data) -> {
+              log().info("Unknown event: {} {}", event, data);
+              return stay();
+            })
     );
 
     when(MyFsmState.DONE,
             matchEvent(MyFsmMessages.ProcessFinished.class, (event, data) -> {
               log().info("Done: event {} data {}. stateData: {} stateName: {}", event, data, stateData(), stateName());
-              worker.tell(new Status.Success());
+              worker.tell(new Status.Success("I finished!"), self());
               return stop();
+            })
+            .anyEvent((event, data) -> {
+              log().info("Unknown event: {} {}", event, data);
+              return stay();
             })
     );
 
+
+    onTransition(
+            matchState(MyFsmState.IDLE, MyFsmState.STEP_1, () -> {
+              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+            })
+            .state(MyFsmState.STEP_1, MyFsmState.STEP_2, () -> {
+              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+            })
+            .state(MyFsmState.STEP_2, MyFsmState.DONE, () -> {
+              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+            })
+    );
   }
 
   @Override
@@ -65,11 +94,32 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
   @Override
   public MyFsmData applyEvent(MyFsmMessages domainEvent, MyFsmData currentData) {
     log().info("applyEvent: event: {} data: {}", domainEvent, currentData);
-    return currentData;
+    MyFsmData newData = currentData;
+    if (domainEvent instanceof MyFsmMessages.Step1Started) {
+      newData = new MyFsmData("Step1Started");
+    } else if (domainEvent instanceof MyFsmMessages.Step2Started) {
+      newData = new MyFsmData("Step2Started");
+    } else if (domainEvent instanceof MyFsmMessages.ProcessFinished) {
+      newData = new MyFsmData("ProcessFinished");
+    }
+    return newData;
+  }
+
+  @Override
+  public void onRecoveryCompleted() {
+    log().info("onRecoveryCompleted: {} {}", stateName(), stateData());
+    self().tell(new MyFsmMessages.ProcessFinished(), self());
+  }
+
+  @Override
+  public void onReplaySuccess() {
+    log().info("onReplaySuccess");
   }
 
   @Override
   public String persistenceId() {
     return persistenceId;
   }
+
+
 }
