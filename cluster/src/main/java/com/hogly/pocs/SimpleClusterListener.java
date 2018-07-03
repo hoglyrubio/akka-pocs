@@ -9,12 +9,14 @@ public class SimpleClusterListener extends AbstractLoggingActor {
   Cluster cluster = Cluster.get(getContext().getSystem());
 
   @Override
-  public void preStart() throws Exception {
+  public void preStart() {
+    log().info("PRE-START");
     cluster.subscribe(getSelf(), ClusterEvent.initialStateAsEvents(), ClusterEvent.MemberEvent.class, ClusterEvent.UnreachableMember.class);
   }
 
   @Override
-  public void postStop() throws Exception {
+  public void postStop() {
+    log().info("POST-STOP");
     cluster.unsubscribe(getSelf());
   }
 

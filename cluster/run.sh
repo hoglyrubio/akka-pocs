@@ -1,0 +1,1 @@
+mvn exec:java -Dexec.mainClass=com.hogly.pocs.SimpleClusterApp -Dexec.args="$1"
