@@ -44,7 +44,7 @@ public class SimpleClusterApp {
   private static void startClusterShardingActors(ActorSystem system) {
     ClusterShardingSettings settings = ClusterShardingSettings.create(system);
 
-    ShardRegion.MessageExtractor messageExtractor = getMessageExtractor();
+    ShardRegion.MessageExtractor messageExtractor = getHashCodeMessageExtractor();
 
     ActorRef shardRegion = ClusterSharding.get(system).start(
       "Aggregate",
@@ -66,6 +66,19 @@ public class SimpleClusterApp {
       system.dispatcher()
     );
 
+  }
+
+  private static ShardRegion.MessageExtractor getHashCodeMessageExtractor() {
+    return new ShardRegion.HashCodeMessageExtractor(2) {
+
+      @Override
+      public String entityId(Object msg) {
+        if (msg instanceof AggregateMessage) {
+          return ((AggregateMessage) msg).getAggregateId().id();
+        }
+        return null;
+      }
+    };
   }
 
   private static ShardRegion.MessageExtractor getMessageExtractor() {
