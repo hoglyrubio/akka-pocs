@@ -4,10 +4,15 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.Status;
+import akka.pattern.Backoff;
+import akka.pattern.BackoffSupervisor;
 import akka.testkit.javadsl.TestKit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import scala.concurrent.duration.Duration;
+
+import java.util.concurrent.TimeUnit;
 
 public class MyFsmTest {
 
@@ -29,9 +34,13 @@ public class MyFsmTest {
     new TestKit(system) {
       {
         Props props = Props.create(MyFsm.class, () -> new MyFsm(getRef()));
-        ActorRef myFsm = system.actorOf(props);
-        send(myFsm, new MyFsmMessages.StartProcess());
-        expectMsgClass(Status.Success.class);
+
+        Props supervisorProps = BackoffSupervisor.props(Backoff.onFailure(props, "my-fsm",
+          Duration.create(5, TimeUnit.SECONDS), Duration.create(15, TimeUnit.SECONDS), 0.2));
+
+        ActorRef myFsm = system.actorOf(supervisorProps, "my-fsm-supervised");
+        send(myFsm, "Hola");
+        expectMsgClass(Duration.apply(60, TimeUnit.SECONDS), Status.Success.class);
       }
     };
   }

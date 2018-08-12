@@ -19,6 +19,7 @@
     <module>ldap</module>
     <module>dse-graph</module>
     <module>fsm</module>
+    <module>codeinterview</module>
   </modules>
 
   <properties>

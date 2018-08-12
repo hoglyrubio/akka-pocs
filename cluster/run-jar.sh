@@ -1,0 +1,1 @@
+java -Dexec.args="$1" -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=$2 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -jar target/cluster-1.0-SNAPSHOT.jar

@@ -4,6 +4,7 @@ import akka.Done;
 import akka.actor.AbstractLoggingFSM;
 import akka.actor.ActorRef;
 import akka.actor.Status;
+import scala.Option;
 
 public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
 
@@ -11,6 +12,7 @@ public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
 
   public MyFsm(ActorRef parentActor) {
     this.parentActor = parentActor;
+    log().info("CONSTRUCTOR: {}", parentActor);
   }
 
   {
@@ -28,7 +30,8 @@ public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
 
     when(MyFsmState.STEP_2, matchEvent(MyFsmMessages.Step2Finished.class, (event, data) -> {
       log().info("Incoming: event {} data {}. stateData(): {} stateName(): {}", event, data, stateData(), stateName());
-      return goTo(MyFsmState.DONE).using(new MyFsmData("I'm Done"));
+      throw new RuntimeException("Exception in the middle");
+      //return goTo(MyFsmState.DONE).using(new MyFsmData("I'm Done"));
     }));
 
     when(MyFsmState.DONE, matchEvent(Done.class, (event, data) -> {
@@ -85,6 +88,21 @@ public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
     );
 
     initialize();
+  }
+
+  @Override
+  public void postStop() {
+    log().warning("POST-STOP");
+  }
+
+  @Override
+  public void postRestart(Throwable reason) throws Exception {
+    log().error(reason, "POST-RESTART");
+  }
+
+  @Override
+  public void preStart() throws Exception {
+    log().warning("PRE-START");
   }
 
 }
