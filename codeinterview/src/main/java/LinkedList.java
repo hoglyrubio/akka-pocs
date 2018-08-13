@@ -1,7 +1,3 @@
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 public class LinkedList {
 
   public String value;
@@ -24,9 +20,8 @@ public class LinkedList {
     return sb.toString();
   }
 
-  /*
-        1 -> 2 -> 3 -> 4 -> null-
-        null <- 1 <- 2 <- 3 <- 4
+  /*c
+        1 -> 2 -> 3 -> 4 -> null
         4 -> 3 -> 2 -> 1 -> null
    */
   public static LinkedList reverse(LinkedList list) {
