@@ -20,6 +20,7 @@
     <module>dse-graph</module>
     <module>fsm</module>
     <module>codeinterview</module>
+    <module>KafkaTest</module>
   </modules>
 
   <properties>
