@@ -19,6 +19,7 @@ public class MyConsumer {
 
   public static void main(String[] args) {
     ActorSystem system = ActorSystem.create("kafka-testing");
+    consumeAutoCommit(system, "my-topic", "my-consumer-group");
   }
 
   public static CompletionStage<Done> consumeAutoCommit(ActorSystem system, String topic, String consumerGroup) {
