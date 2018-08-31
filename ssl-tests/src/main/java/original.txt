@@ -30,7 +30,7 @@ public static HttpsConnectionContext createHttpsConnectionConext1(ActorSystem sy
   }
 
   public static InputStream read(String path) {
-    return Optional.ofNullable(SimpleClient.class.getClassLoader().getResourceAsStream(path))
+    return Optional.ofNullable(HttpsClient.class.getClassLoader().getResourceAsStream(path))
       .orElseThrow(() -> new RuntimeException("Not found: " + path));
   }
 
