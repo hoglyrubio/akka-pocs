@@ -29,8 +29,8 @@ public class SimpleClusterApp {
   public static void startup(String[] ports) {
     for (String port : ports) {
       Config config = ConfigFactory.parseString(
-        "akka.remote.netty.tcp.port=" + port + "\n" +
-          "akka.remote.artery.canonical.port=" + port)
+        "akka.remote.netty.tcp.port=" + port) // + "\n" +
+          //"akka.remote.artery.canonical.port=" + port)
         .withFallback(ConfigFactory.load());
 
       ActorSystem system = ActorSystem.create("MyClusterName", config);
@@ -42,14 +42,14 @@ public class SimpleClusterApp {
   }
 
   private static void startClusterShardingActors(ActorSystem system) {
-    ClusterShardingSettings settings = ClusterShardingSettings.create(system);
+    ClusterShardingSettings clusterShardingSettings = ClusterShardingSettings.create(system);
 
     ShardRegion.MessageExtractor messageExtractor = getHashCodeMessageExtractor();
 
     ActorRef shardRegion = ClusterSharding.get(system).start(
       "Aggregate",
       Props.create(AggregateActor.class),
-      settings,
+      clusterShardingSettings,
       messageExtractor
     );
 
