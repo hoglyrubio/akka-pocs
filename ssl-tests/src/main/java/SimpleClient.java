@@ -49,11 +49,11 @@ public class SimpleClient {
 
   public static HttpsConnectionContext getHttpsConnectionContext() throws Exception {
     KeyStore keyStore = KeyStore.getInstance("JKS");
-    InputStream inputStream = read("certs/xtiva-nutibara-org-seed-keystore.jks");
+    InputStream inputStream = read("certs/my-keystore.jks");
     keyStore.load(inputStream, "123456".toCharArray());
 
     KeyStore trustedKey = KeyStore.getInstance("JKS");
-    InputStream trustStore = read("certs/xtiva-nutibara-org-seed-truststore.jks");
+    InputStream trustStore = read("certs/my-truststore.jks");
     trustedKey.load(trustStore, "123456".toCharArray());
 
     KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
@@ -64,15 +64,6 @@ public class SimpleClient {
 
     SSLContext context = SSLContext.getInstance("TLS");
     context.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
-
-    /*
-    SSLContext sslContext = SSLContext.getInstance(TLS_PROTOCOL);
-    sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);*/
-
-/*    SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
-    HttpClient httpClient = HttpClients.custom()
-      .setSSLSocketFactory(sslSocketFactory)
-      .build();*/
 
     return ConnectionContext.https(context);
   }

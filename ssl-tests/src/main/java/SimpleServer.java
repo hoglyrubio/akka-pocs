@@ -31,11 +31,11 @@ public class SimpleServer extends AllDirectives {
     HttpsConnectionContext https = null;
     try {
       KeyStore keyStore = KeyStore.getInstance("JKS");
-      InputStream keystore = read("certs/xtiva-nutibara-org-seed-keystore.jks");
+      InputStream keystore = read("certs/my-keystore.jks");
       keyStore.load(keystore, "123456".toCharArray());
 
       KeyStore trustedKey = KeyStore.getInstance("JKS");
-      InputStream trustStore = read("certs/xtiva-nutibara-org-seed-truststore.jks");
+      InputStream trustStore = read("certs/my-truststore.jks");
       trustedKey.load(trustStore, "123456".toCharArray());
 
       KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");

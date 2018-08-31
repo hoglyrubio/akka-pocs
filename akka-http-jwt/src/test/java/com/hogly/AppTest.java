@@ -128,7 +128,7 @@ public class AppTest extends JUnitRouteTest {
 
         route.run(request)
           .assertStatusCode(StatusCodes.OK)
-          .assertEntity("AuthorizationContext { instanceAlias='lsf.xtivacloud.com', userId='hrubiot', roles=[Comp Admin, Advisor], permissions=[create, update, delete]}");
+          .assertEntity("AuthorizationContext { instanceAlias='company.url.com', userId='hrubiot', roles=[Comp Admin, Advisor], permissions=[create, update, delete]}");
       }
     };
   }
