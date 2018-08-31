@@ -57,7 +57,7 @@ public class SSLDirective extends AllDirectives {
     CompletionStage<String> future = PatternsCS.ask(clusteredActor, message, 10000)
       .thenApply(obj -> AggregateId.class.cast(obj))
       .thenApply(AggregateId::id);
-    //callbackUsingHttps();
+    callbackUsingHttps();
     return completeOKWithFutureString(future);
   }
 
