@@ -21,10 +21,10 @@ public class App {
     String urlHost = Objects.requireNonNull(System.getenv("host")); // localhost
     String urlPort = Objects.requireNonNull(System.getenv("port")); // 8082
     */
-    int httpPort = 8081;            // 8081
-    int clusteringPort = 2551;      // 2551
+    int httpPort = 8082;            // 8081
+    int clusteringPort = 2552;      // 2551
     String urlHost = "localhost";   // localhost
-    String urlPort = "8082";        // 8082
+    String urlPort = "8081";        // 8082
 
     Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port=" + clusteringPort)
       .withFallback(ConfigFactory.load());
