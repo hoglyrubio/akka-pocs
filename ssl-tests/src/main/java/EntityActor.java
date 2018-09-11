@@ -1,27 +1,27 @@
 import akka.actor.AbstractLoggingActor;
 
-public class AggregateActor extends AbstractLoggingActor {
+public class EntityActor extends AbstractLoggingActor {
 
   @Override
   public void preStart() {
-    log().info("Starting");
+    //log().info("Starting");
   }
 
   @Override
   public void postStop() {
-    log().info("Stopping");
+    //log().info("Stopping");
   }
 
   @Override
   public Receive createReceive() {
     return receiveBuilder()
-      .match(AggregateMessage.class, this::handleMessage)
+      .match(EntityMessage.class, this::handleMessage)
       .build();
   }
 
-  private void handleMessage(AggregateMessage msg) {
+  private void handleMessage(EntityMessage msg) {
     log().info("I´m handling: {} from: {}", msg, sender());
-    sender().tell(AggregateId.create(), self());
+    sender().tell(EntityId.create(), self());
   }
 
 }

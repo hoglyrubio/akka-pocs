@@ -5,6 +5,7 @@ import akka.http.javadsl.HttpsConnectionContext;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.StatusCode;
+import akka.http.javadsl.model.headers.RawHeader;
 import akka.japi.Pair;
 import akka.stream.ActorMaterializer;
 import akka.util.ByteString;
@@ -27,18 +28,6 @@ public class HttpsClient {
   private final ActorMaterializer materializer;
   private final SSLContext sslContext;
   private final HttpsConnectionContext httpsConnectionContext;
-
-  public static void main(String[] args) throws Exception {
-    System.out.println(LocalDateTime.now());
-    ActorSystem system = ActorSystem.create();
-    HttpsClient client = new HttpsClient(system);
-    for (int i = 0; i < 100; i++) {
-      Pair<StatusCode, String> pair = client.doGet("https://localhost:8080/hello")
-        .thenCompose(httpResponse -> client.toStatusAndBody(httpResponse))
-        .toCompletableFuture().get(10, TimeUnit.SECONDS);
-      System.out.println(LocalDateTime.now() + " - " + i + " - status: " + pair.first() + " response: " + pair.second());
-    }
-  }
 
   public HttpsClient(ActorSystem system) {
     this.system = system;

@@ -15,6 +15,7 @@
     <akka.version>2.5.9</akka.version>
     <akka-http.version>10.0.9</akka-http.version>
     <jackson.version>2.8.6</jackson.version>
+    <akka-split-brain-resolver.version>1.1.0</akka-split-brain-resolver.version>
   </properties>
 
   <dependencies>
@@ -54,14 +55,14 @@
       <version>${akka.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.lightbend.akka</groupId>
+      <artifactId>akka-split-brain-resolver_2.11</artifactId>
+      <version>${akka-split-brain-resolver.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-slf4j_2.11</artifactId>
       <version>${akka.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.auth0</groupId>
-      <artifactId>java-jwt</artifactId>
-      <version>3.3.0</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
