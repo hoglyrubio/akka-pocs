@@ -1,6 +1,7 @@
 import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.event.Logging;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.ConnectionContext;
 import akka.http.javadsl.Http;
@@ -13,6 +14,7 @@ import akka.http.javadsl.server.PathMatchers;
 import akka.http.javadsl.server.Route;
 import akka.pattern.PatternsCS;
 import akka.stream.ActorMaterializer;
+import akka.stream.Attributes;
 import akka.stream.javadsl.Flow;
 
 import javax.net.ssl.SSLContext;
@@ -26,11 +28,12 @@ public class SSLDirective extends AllDirectives {
 
   public static CompletionStage<ServerBinding> start(ActorSystem system, String hostname, int port) {
     Http http = Http.get(system);
+    http.setDefaultServerHttpContext(createHttpsConnectionContext());
+
+    SSLDirective directive = new SSLDirective(system);
+
     ActorMaterializer materializer = ActorMaterializer.create(system);
-    HttpsConnectionContext httpsConnectionContext = createHttpsConnectionContext();
-    http.setDefaultServerHttpContext(httpsConnectionContext);
-    SSLDirective app = new SSLDirective(system);
-    Flow<HttpRequest, HttpResponse, NotUsed> flow = app.createRoute().flow(system, materializer);
+    Flow<HttpRequest, HttpResponse, NotUsed> flow = directive.createRoute().flow(system, materializer);
     return Http.get(system).bindAndHandle(flow, ConnectHttp.toHost(hostname, port), materializer);
   }
 
@@ -51,7 +54,7 @@ public class SSLDirective extends AllDirectives {
   }
 
   private Route sayHello(String host, String port) {
-    String url = "https://" + host + "/" + port + "/hello";
+    String url = "https://" + host + ":" + port + "/hello";
 
     CompletionStage<String> response = httpsClient.doGet(MessageFormat.format(url, EntityId.create()))
       .thenCompose(httpResponse -> httpsClient.toStatusAndBody(httpResponse))

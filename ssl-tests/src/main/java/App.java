@@ -6,23 +6,19 @@ public class App {
 
   public static void main(String[] args) {
 
-    // mvn exec:java -Dexec.mainClass=App -Dhttps=8081 -Dtcp=2551 -Dhost=localhost -Dport=8082
-    // mvn exec:java -Dexec.mainClass=App -Dhttps=8082 -Dtcp=2552 -Dhost=localhost -Dport=8081
+    /**
+     * 1) To execute the first instance use: httpPort=8081 and akkaPort=2551
+     * 2) To execute the second instance use: httpPort=8082 and akkaPort=2552
+     * 3) Try calling the endpoints defined in SSLDirective class:
+     */
 
-    /*int httpPort = Integer.valueOf(Objects.requireNonNull(System.getenv("https"))); // 8081
-    int clusteringPort = Integer.valueOf(Objects.requireNonNull(System.getenv("tcp"))); // 2551
-    String urlHost = Objects.requireNonNull(System.getenv("host")); // localhost
-    String urlPort = Objects.requireNonNull(System.getenv("port")); // 8082
-    */
-    int httpPort = 8082;            // 8081
-    int clusteringPort = 2552;      // 2551
-    String urlHost = "localhost";   // localhost
-    String urlPort = "8081";        // 8082
+    int httpPort = 8081; // [ 8081, 8082 ]
+    int akkaPort = 2551; // [ 2551, 2552 ]
 
-    Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port=" + clusteringPort)
+    Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port=" + akkaPort)
       .withFallback(ConfigFactory.load());
     ActorSystem system = ActorSystem.create("MyClusterName", config);
-    SSLDirective.start(system, "localhost", httpPort, "https://" + urlHost + ":" + urlPort + "/entities/{0}");
+    SSLDirective.start(system, "localhost", httpPort);
     EntityClusterSharding.createClusterShardingActor(system);
   }
 
