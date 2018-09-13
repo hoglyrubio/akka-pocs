@@ -1,7 +1,6 @@
 import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.event.Logging;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.ConnectionContext;
 import akka.http.javadsl.Http;
@@ -14,7 +13,6 @@ import akka.http.javadsl.server.PathMatchers;
 import akka.http.javadsl.server.Route;
 import akka.pattern.PatternsCS;
 import akka.stream.ActorMaterializer;
-import akka.stream.Attributes;
 import akka.stream.javadsl.Flow;
 
 import javax.net.ssl.SSLContext;
@@ -56,7 +54,7 @@ public class SSLDirective extends AllDirectives {
   private Route sayHello(String host, String port) {
     String url = "https://" + host + ":" + port + "/hello";
 
-    CompletionStage<String> response = httpsClient.doGet(MessageFormat.format(url, EntityId.create()))
+    CompletionStage<String> response = httpsClient.doGetSuperPool(MessageFormat.format(url, EntityId.create()))
       .thenCompose(httpResponse -> httpsClient.toStatusAndBody(httpResponse))
       .thenApply(pair -> "Received: " + pair.second() + " from: " + url + " status: " + pair.first())
       .exceptionally(e -> {

@@ -1,56 +1,101 @@
 import akka.actor.ActorSystem;
+import akka.dispatch.Futures;
 import akka.http.javadsl.ConnectionContext;
 import akka.http.javadsl.Http;
-import akka.http.javadsl.HttpsConnectionContext;
+import akka.http.javadsl.model.HttpHeader;
+import akka.http.javadsl.model.HttpMethods;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.StatusCode;
-import akka.http.javadsl.model.headers.RawHeader;
 import akka.japi.Pair;
 import akka.stream.ActorMaterializer;
-import akka.util.ByteString;
+import akka.stream.OverflowStrategy;
+import akka.stream.QueueOfferResult;
+import akka.stream.javadsl.Flow;
+import akka.stream.javadsl.Keep;
+import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
+import akka.stream.javadsl.SourceQueue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import com.sun.org.apache.regexp.internal.RE;
+import scala.compat.java8.FutureConverters;
+import scala.concurrent.Promise;
+import scala.util.Try;
 
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 
 public class HttpsClient {
 
-  private final ActorSystem system;
-  private final Http http;
-  private final ActorMaterializer materializer;
-  private final SSLContext sslContext;
-  private final HttpsConnectionContext httpsConnectionContext;
+  protected final ActorSystem system;
+  protected final Http http;
+  protected final ActorMaterializer materializer;
+  protected final SSLContext sslContext;
+  protected int bufferSize = 5000;
+  protected final ObjectMapper MAPPER = new ObjectMapper()
+    .registerModules(new Jdk8Module(), new JavaTimeModule(), new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
+    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
   public HttpsClient(ActorSystem system) {
     this.system = system;
-    this.http = Http.get(system);
-    this.materializer = ActorMaterializer.create(system);
     this.sslContext = new SSLContextBuilder()
       .setKeyStoreResourcePath("certs/my-keystore.jks")
       .setKeyStorePassword("123456")
       .setTrustKeyStoreResourcePath("certs/my-truststore.jks")
       .setTrustKeyStorePassword("123456")
       .build();
-    this.httpsConnectionContext = ConnectionContext.https(sslContext);
+    this.http = Http.get(system);
+    this.http.setDefaultClientHttpsContext(ConnectionContext.https(sslContext));
+    this.materializer = ActorMaterializer.create(system);
   }
 
-  public CompletionStage<HttpResponse> doGet(String url) {
-    HttpRequest request = HttpRequest.create(url);
-    return http.singleRequest(request, httpsConnectionContext, materializer);
+  public CompletionStage<HttpResponse> doGetSingleRequest(String url, HttpHeader... headers) {
+    HttpRequest request = HttpRequest.create(url)
+      .withMethod(HttpMethods.GET)
+      .addHeaders(Arrays.asList(headers));
+    return http.singleRequest(request, materializer);
+  }
+
+  public CompletionStage<HttpResponse> doGetSuperPool(String url, HttpHeader... headers) {
+
+    HttpRequest request = HttpRequest.create(url)
+      .withMethod(HttpMethods.GET)
+      .addHeaders(Arrays.asList(headers));
+
+    system.log().info("REQUEST: {} {}", request.method(), request.getUri());
+
+    Flow flow = http.superPool(materializer);
+    SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>> sourceQueue = (SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>>) Source.queue(bufferSize, OverflowStrategy.dropNew())
+      .via(flow)
+      .toMat(Sink.foreach((Pair<Try<HttpResponse>, Promise<HttpResponse>> p) -> p.second().complete(p.first())), Keep.left())
+      .run(materializer);
+
+    Promise<HttpResponse> promise = Futures.promise();
+    CompletionStage<HttpResponse> httpResponseFuture = sourceQueue.offer(Pair.create(request, promise))
+      .thenCompose(queueOfferResult -> {
+        if (queueOfferResult instanceof QueueOfferResult.Enqueued$) {
+          return FutureConverters.toJava(promise.future());
+        }
+        throw new RuntimeException("queueOfferResult is not instance of QueueOfferResult.Enqueued$: " + queueOfferResult);
+      });
+
+    httpResponseFuture.thenAccept(response -> system.log().info("RESPONSE: {} {}", response.status(), request.getUri()));
+
+    return httpResponseFuture;
   }
 
   public CompletionStage<Pair<StatusCode, String>> toStatusAndBody(HttpResponse httpResponse) {
-    return httpResponse.entity()
-      .toStrict(10000, materializer)
-      .thenApply(strict -> Pair.create(httpResponse.status(), strict.getData().utf8String()));
+    return httpResponse.entity().getDataBytes()
+      .runFold("", (current, byteString) -> current + byteString.decodeString("UTF-8"), materializer)
+      .thenApply(payload -> Pair.create(httpResponse.status(), payload));
   }
 
 }
