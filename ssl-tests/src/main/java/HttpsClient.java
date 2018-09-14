@@ -17,19 +17,16 @@ import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import akka.stream.javadsl.SourceQueue;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import com.sun.org.apache.regexp.internal.RE;
 import scala.compat.java8.FutureConverters;
 import scala.concurrent.Promise;
 import scala.util.Try;
 
 import javax.net.ssl.SSLContext;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
 
@@ -39,7 +36,8 @@ public class HttpsClient {
   protected final Http http;
   protected final ActorMaterializer materializer;
   protected final SSLContext sslContext;
-  protected int bufferSize = 5000;
+  protected final int bufferSize = 5000;
+  protected final SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>> sourceQueue;
   protected final ObjectMapper MAPPER = new ObjectMapper()
     .registerModules(new Jdk8Module(), new JavaTimeModule(), new ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -55,6 +53,7 @@ public class HttpsClient {
     this.http = Http.get(system);
     this.http.setDefaultClientHttpsContext(ConnectionContext.https(sslContext));
     this.materializer = ActorMaterializer.create(system);
+    this.sourceQueue = sourceQueue();
   }
 
   public CompletionStage<HttpResponse> doGetSingleRequest(String url, HttpHeader... headers) {
@@ -72,12 +71,6 @@ public class HttpsClient {
 
     system.log().info("REQUEST: {} {}", request.method(), request.getUri());
 
-    Flow flow = http.superPool(materializer);
-    SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>> sourceQueue = (SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>>) Source.queue(bufferSize, OverflowStrategy.dropNew())
-      .via(flow)
-      .toMat(Sink.foreach((Pair<Try<HttpResponse>, Promise<HttpResponse>> p) -> p.second().complete(p.first())), Keep.left())
-      .run(materializer);
-
     Promise<HttpResponse> promise = Futures.promise();
     CompletionStage<HttpResponse> httpResponseFuture = sourceQueue.offer(Pair.create(request, promise))
       .thenCompose(queueOfferResult -> {
@@ -90,6 +83,14 @@ public class HttpsClient {
     httpResponseFuture.thenAccept(response -> system.log().info("RESPONSE: {} {}", response.status(), request.getUri()));
 
     return httpResponseFuture;
+  }
+
+  private SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>> sourceQueue() {
+    Flow flow = http.superPool(materializer);
+    return (SourceQueue<Pair<HttpRequest, Promise<HttpResponse>>>) Source.queue(bufferSize, OverflowStrategy.dropNew())
+      .via(flow)
+      .toMat(Sink.foreach((Pair<Try<HttpResponse>, Promise<HttpResponse>> p) -> p.second().complete(p.first())), Keep.left())
+      .run(materializer);
   }
 
   public CompletionStage<Pair<StatusCode, String>> toStatusAndBody(HttpResponse httpResponse) {

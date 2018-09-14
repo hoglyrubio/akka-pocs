@@ -12,8 +12,8 @@ public class App {
      * 3) Try calling the endpoints defined in SSLDirective class:
      */
 
-    int httpPort = 8081; // [ 8081, 8082 ]
-    int akkaPort = 2551; // [ 2551, 2552 ]
+    int httpPort = 8082; // [ 8081, 8082 ]
+    int akkaPort = 2552; // [ 2551, 2552 ]
 
     Config config = ConfigFactory.parseString("akka.remote.netty.tcp.port=" + akkaPort)
       .withFallback(ConfigFactory.load());
