@@ -1,4 +1,4 @@
-dn: dc=xtiva,dc=com
+dn: dc=mycompany,dc=com
 objectClass: domain
 objectClass: top
-dc: xtiva
+dc: mycompany

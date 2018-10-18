@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
   )
 @CreateDS(
   allowAnonAccess = true,
-  partitions = { @CreatePartition(name = "Xtiva", suffix = "dc=example,dc=com")}
+  partitions = { @CreatePartition(name = "MyCompany", suffix = "dc=example,dc=com")}
 )
 @ApplyLdifFiles("ldap-data.ldif")
 public class ApacheDsIntegrationTest extends AbstractLdapTestUnit {
