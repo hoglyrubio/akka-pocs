@@ -1,4 +1,4 @@
-package com.hogly;
+package com.hogly.jwt;
 
 import akka.actor.ActorSystem;
 import akka.http.javadsl.model.HttpRequest;
@@ -10,17 +10,9 @@ import akka.http.javadsl.testkit.JUnitRouteTest;
 import akka.http.javadsl.testkit.TestRoute;
 import akka.http.javadsl.testkit.TestRouteResult;
 import akka.testkit.javadsl.TestKit;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class AppTest extends JUnitRouteTest {
 

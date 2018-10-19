@@ -1,4 +1,4 @@
-package com.hogly;
+package com.hogly.jwt;
 
 import akka.Done;
 import akka.actor.ActorSystem;

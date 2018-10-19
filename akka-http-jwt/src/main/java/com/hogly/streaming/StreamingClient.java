@@ -1,4 +1,4 @@
-package com.hogly;
+package com.hogly.streaming;
 
 import akka.actor.ActorSystem;
 import akka.http.javadsl.Http;
@@ -9,7 +9,9 @@ import akka.http.javadsl.model.HttpRequest;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
+import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 public class StreamingClient {
@@ -24,42 +26,34 @@ public class StreamingClient {
       .create("http://localhost:1977/random")
       .withMethod(HttpMethods.GET);
 
+    /** Streaming */
     streamingClient(request, MyRecord.class)
-      .thenCompose(source -> {
-        return source
-          .map(myRecord -> {
-            system.log().info("Processing: {}", myRecord);
-            return myRecord;
-          })
-          .runWith(Sink.ignore(), materializer);
-      })
+      .thenCompose(source -> source.map(myRecord -> {
+        system.log().info("Processing: {}", myRecord);
+        return myRecord;
+      }).runWith(Sink.ignore(), materializer))
       .exceptionally(e -> { system.log().error("Error", e); return null; });
 
-    // Classic way, wait all response
+    /** Classic */
+    TypeReference<List<MyRecord>> typeReference = new TypeReference<List<MyRecord>>() {};
     classicClient(request)
-      .thenApply(response -> MyMarshaller.fromJson(response, MyRecord.class))
+      .thenApply(response -> MyMarshaller.fromJson(response, typeReference))
       .thenAccept(response -> system.log().info("RESPONSE: {}", response))
       .exceptionally(e -> { system.log().error("Error", e); return null; });
   }
 
   private static CompletionStage<String> classicClient(HttpRequest request) {
     return http.singleRequest(request, materializer)
-      .thenCompose(httpResponse -> {
-        return httpResponse.entity().getDataBytes()
-          .runFold("", (current, byteString) -> current + byteString.decodeString("UTF-8"), materializer);
-      })
-    ;
+      .thenCompose(httpResponse -> httpResponse.entity().getDataBytes()
+        .runFold("", (current, byteString) -> current + byteString.decodeString("UTF-8"), materializer));
   }
 
   private static <T> CompletionStage<Source<MyRecord, Object>> streamingClient(HttpRequest request, Class<T> clazz) {
     return http.singleRequest(request, materializer)
-      .thenApply(httpResponse -> httpResponse.entity().getDataBytes())
-      .thenApply(source -> {
-        return source
-          .via(jsonEntityStreamingSupport.framingDecoder())
-          .map(byteString -> byteString.utf8String())
-          .map(json -> MyMarshaller.fromJson(json, MyRecord.class));
-      });
+      .thenApply(httpResponse -> httpResponse.entity().getDataBytes()
+        .via(jsonEntityStreamingSupport.framingDecoder())
+        .map(byteString -> byteString.utf8String())
+        .map(json -> MyMarshaller.fromJson(json, MyRecord.class)));
   }
 
 }

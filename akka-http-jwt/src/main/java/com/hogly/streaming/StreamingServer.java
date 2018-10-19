@@ -1,4 +1,4 @@
-package com.hogly;
+package com.hogly.streaming;
 
 import akka.NotUsed;
 import akka.actor.ActorSystem;
@@ -12,7 +12,6 @@ import akka.http.javadsl.model.ContentTypes;
 import akka.http.javadsl.model.HttpEntities;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
-import akka.http.javadsl.model.MediaType;
 import akka.http.javadsl.model.RequestEntity;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
@@ -36,13 +35,10 @@ public class StreamingServer extends AllDirectives {
     });
   }
 
-
   private final ActorSystem system;
   private final Http http;
   private final ConnectHttp connect;
   private final ActorMaterializer materializer;
-
-  private Random random;
   private ContentType.WithFixedCharset contentType;
   private Marshaller<MyRecord, RequestEntity> compensationMarshaller;
   private EntityStreamingSupport entityStreamingSupport;
@@ -52,8 +48,6 @@ public class StreamingServer extends AllDirectives {
     this.http = Http.get(system);
     this.materializer = ActorMaterializer.create(system);
     this.connect = ConnectHttp.toHost(hostname, port);
-
-    this.random = new Random();
     this.contentType = ContentTypes.APPLICATION_JSON;
     this.entityStreamingSupport = EntityStreamingSupport.json().withContentType(contentType).withParallelMarshalling(10, false);
     this.compensationMarshaller = Marshaller.withFixedContentType(contentType, (MyRecord myRecord) -> HttpEntities.create(contentType, MyMarshaller.toJson(myRecord)));
@@ -71,10 +65,11 @@ public class StreamingServer extends AllDirectives {
   }
 
   private Route randomNumbers() {
+    Random random = new Random();
     Source<MyRecord, NotUsed> source = Source.fromIterator(() -> Stream.generate(random::nextInt)
-      .map(this::sleep)
+      //.map(this::sleep)
       .map(value -> new MyRecord(value, UUID.randomUUID().toString()))
-      .limit(100)
+      .limit(1000)
       .iterator());
     return completeOKWithSource(source, compensationMarshaller, entityStreamingSupport);
   }

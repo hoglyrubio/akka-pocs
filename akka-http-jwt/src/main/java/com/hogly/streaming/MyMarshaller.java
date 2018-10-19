@@ -1,6 +1,7 @@
-package com.hogly;
+package com.hogly.streaming;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -24,5 +25,14 @@ public class MyMarshaller {
       throw new RuntimeException("Error deserializing", e);
     }
   }
+
+  public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+    try {
+      return MAPPER.readValue(json, typeReference);
+    } catch (IOException e) {
+      throw new RuntimeException("Error deserializing", e);
+    }
+  }
+
 
 }

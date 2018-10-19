@@ -8,7 +8,7 @@ import scala.Option;
 
 public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
 
-  private static ActorRef parentActor;
+  private ActorRef parentActor;
 
   public MyFsm(ActorRef parentActor) {
     this.parentActor = parentActor;
@@ -30,8 +30,8 @@ public class MyFsm extends AbstractLoggingFSM<MyFsmState, MyFsmData> {
 
     when(MyFsmState.STEP_2, matchEvent(MyFsmMessages.Step2Finished.class, (event, data) -> {
       log().info("Incoming: event {} data {}. stateData(): {} stateName(): {}", event, data, stateData(), stateName());
-      throw new RuntimeException("Exception in the middle");
-      //return goTo(MyFsmState.DONE).using(new MyFsmData("I'm Done"));
+      //throw new RuntimeException("Exception in the middle");
+      return goTo(MyFsmState.DONE).using(new MyFsmData("I'm Done"));
     }));
 
     when(MyFsmState.DONE, matchEvent(Done.class, (event, data) -> {
