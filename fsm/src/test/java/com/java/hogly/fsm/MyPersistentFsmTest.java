@@ -11,15 +11,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import akka.testkit.javadsl.TestKit;
+import scala.concurrent.duration.FiniteDuration;
 
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class MyPersistentFsmTest {
 
+  public static final FiniteDuration TIMEOUT = FiniteDuration.apply(10, TimeUnit.SECONDS);
   private static ActorSystem system;
 
   @BeforeClass
@@ -37,15 +40,23 @@ public class MyPersistentFsmTest {
   public void shouldProcessAllSteps() {
     new TestKit(system) {
       {
-        String id = "1000";
+        String id = UUID.randomUUID().toString();
+
         Props props = Props.create(MyPersistentFsm.class, () -> new MyPersistentFsm(id, getRef()));
         ActorRef myFsm = system.actorOf(props);
-//        send(myFsm, new MyFsmMessages.StartProcess());
-//        expectMsgClass(MyFsmMessages.StartStep1.class);
-//        send(myFsm, new MyFsmMessages.Step1Finished());
-//        expectMsgClass(MyFsmMessages.StartStep2.class);
-//        send(myFsm, new MyFsmMessages.Step2Finished());
-        expectMsgClass(Status.Success.class);
+
+        send(myFsm, new MyFsmMessages.StartProcess());
+        expectMsgClass(TIMEOUT, MyFsmMessages.StartStep1.class);
+        send(myFsm, new MyFsmMessages.Step1Finished());
+        expectMsgClass(TIMEOUT, MyFsmMessages.StartStep2.class);
+        send(myFsm, new MyFsmMessages.Step2Finished());
+        expectMsgClass(TIMEOUT, Status.Success.class);
+
+        system.stop(myFsm);
+        myFsm = system.actorOf(props);
+
+        send(myFsm, new MyFsmMessages.StartProcess());
+        expectMsgClass(TIMEOUT, Status.Success.class);
       }
     };
   }

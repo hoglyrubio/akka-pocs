@@ -6,9 +6,8 @@ import akka.persistence.fsm.AbstractPersistentFSM;
 
 public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData, MyFsmMessages> {
 
-  private static String persistenceId;
-  private static ActorRef worker;
-  private static MyFsmData myData;
+  private String persistenceId;
+  private ActorRef worker;
 
   public MyPersistentFsm(String persistenceId, ActorRef worker) {
     this.persistenceId = persistenceId;

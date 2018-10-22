@@ -20,7 +20,7 @@ public class MyFsmTest {
 
   @BeforeClass
   public static void beforeAll() {
-    system = ActorSystem.create();
+    system = ActorSystem.create("fsm-testing");
   }
 
   @AfterClass
@@ -39,7 +39,7 @@ public class MyFsmTest {
           Duration.create(5, TimeUnit.SECONDS), Duration.create(15, TimeUnit.SECONDS), 0.2));
 
         ActorRef myFsm = system.actorOf(supervisorProps, "my-fsm-supervised");
-        send(myFsm, "Hola");
+        send(myFsm, new MyFsmMessages.StartProcess());
         expectMsgClass(Duration.apply(60, TimeUnit.SECONDS), Status.Success.class);
       }
     };
@@ -53,7 +53,6 @@ public class MyFsmTest {
         ActorRef myFsm = system.actorOf(props, "my-sick-fsm");
         send(myFsm, new MyFsmMessages.Step1Finished());
         expectMsgClass(Status.Failure.class);
-        //send(myFsm, new MyFsmMessages.StartProcess());
       }
     };
   }
