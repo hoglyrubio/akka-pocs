@@ -18,12 +18,13 @@ public class AggregateActor extends AbstractLoggingActor {
   }
 
   private void handleGet(GetValue msg) {
+    SleepUtils.sleep();
     sender().tell(this.value, self());
   }
 
   private void handleAdd(BigDecimal msg) {
+    SleepUtils.sleep();
     this.value = this.value.add(msg);
-    log().info("Current value: {}", this.value);
     sender().tell(Done.getInstance(), self());
   }
 
