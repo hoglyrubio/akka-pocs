@@ -19,4 +19,12 @@ public class AggregateMessage<T> implements Serializable {
   public T getPayload() {
     return payload;
   }
+
+  @Override
+  public String toString() {
+    return "AggregateMessage {" +
+      "aggregateId=" + aggregateId.id() +
+      ", payload=" + payload +
+      '}';
+  }
 }

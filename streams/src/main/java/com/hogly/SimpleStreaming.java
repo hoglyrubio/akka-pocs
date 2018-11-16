@@ -27,7 +27,8 @@ public class SimpleStreaming {
   private static void simpleStreaming() {
     ActorSystem system = ActorSystem.create("simple-stream");
 
-    Source<Double, NotUsed> source = Source.from(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0));
+    //Source<Double, NotUsed> source = Source.from(Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0));
+    Source<Double, NotUsed> source = Source.repeat(new Double(1234.56));
 
     ActorRef aggregate = system.actorOf(Props.create(AggregateActor.class));
 

@@ -42,18 +42,18 @@ public class SimpleClusterApp {
   }
 
   private static void startClusterShardingActors(ActorSystem system) {
+
+    ClusterSharding clusterSharding = ClusterSharding.get(system);
     ClusterShardingSettings clusterShardingSettings = ClusterShardingSettings.create(system);
 
-    ShardRegion.MessageExtractor messageExtractor = getHashCodeMessageExtractor();
-
-    ActorRef shardRegion = ClusterSharding.get(system).start(
+    ActorRef shardRegion = clusterSharding.start(
       "Aggregate",
       Props.create(AggregateActor.class),
       clusterShardingSettings,
-      messageExtractor
+      getHashCodeMessageExtractor()
     );
 
-    ActorRef aggregate = ClusterSharding.get(system).shardRegion("Aggregate");
+    ActorRef aggregate = clusterSharding.shardRegion("Aggregate");
 
     system.scheduler().schedule(
       FiniteDuration.apply(5, TimeUnit.SECONDS),

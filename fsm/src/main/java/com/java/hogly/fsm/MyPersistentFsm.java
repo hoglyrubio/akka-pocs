@@ -24,6 +24,7 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
                       log().info("andThen: event {} data {}. stateData: {} stateName: {}", event, data, stateData(), stateName());
                       worker.tell(new MyFsmMessages.StartStep1(), self());
                     }))
+                    .replying(new MyFsmData("El verdadero"))
             )
             .anyEvent((event, data) -> {
               log().info("Unknown event: {} {}", event, data);

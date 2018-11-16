@@ -23,6 +23,7 @@
     <module>KafkaTest</module>
     <module>ssl-tests</module>
     <module>streams</module>
+    <module>akkaTyped</module>
   </modules>
 
   <properties>
