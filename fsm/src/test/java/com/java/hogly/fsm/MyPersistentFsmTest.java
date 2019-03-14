@@ -49,7 +49,7 @@ public class MyPersistentFsmTest {
         expectMsgClass(TIMEOUT, MyFsmMessages.StartStep1.class);
         send(myFsm, new MyFsmMessages.Step1Finished());
         expectMsgClass(TIMEOUT, MyFsmMessages.StartStep2.class);
-        send(myFsm, new MyFsmMessages.Step2Finished());
+        //send(myFsm, new MyFsmMessages.Step2Finished());
         expectMsgClass(TIMEOUT, Status.Success.class);
 
         system.stop(myFsm);
