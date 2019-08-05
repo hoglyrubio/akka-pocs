@@ -2,7 +2,10 @@ package com.java.hogly.fsm;
 
 import akka.actor.ActorRef;
 import akka.actor.Status;
+import akka.pattern.PatternsCS;
 import akka.persistence.fsm.AbstractPersistentFSM;
+
+import java.util.concurrent.CompletionStage;
 
 public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData, MyFsmMessages> {
 
@@ -25,10 +28,10 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
                       worker.tell(new MyFsmMessages.StartStep1(), self());
                     }))
             )
-            .anyEvent((event, data) -> {
+            /*.anyEvent((event, data) -> {
               log().info("Unknown event: {} {}", event, data);
               return stay();
-            })
+            })*/
     );
 
     when(MyFsmState.STEP_1,
@@ -36,13 +39,15 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
                     .applying(new MyFsmMessages.Step2Started())
                     .andThen(exec(currentData -> {
                       log().info("andThen: event {} data {}. stateData: {} stateName: {}", event, data, stateData(), stateName());
-                      worker.tell(new MyFsmMessages.StartStep2(), self());
+                      //worker.tell(new MyFsmMessages.StartStep2(), self());
+                      CompletionStage<Object> request = PatternsCS.ask(worker, new MyFsmMessages.StartStep2(), 1000);
+                      PatternsCS.pipe(request, getContext().dispatcher()).to(self());
                     }))
             )
-            .anyEvent((event, data) -> {
+            /*.anyEvent((event, data) -> {
               log().info("Unknown event: {} {}", event, data);
               return stay();
-            })
+            })*/
     );
 
     when(MyFsmState.STEP_2,
@@ -53,10 +58,10 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
                       self().tell(new MyFsmMessages.ProcessFinished(), self());
                     }))
             )
-            .anyEvent((event, data) -> {
+            /*.anyEvent((event, data) -> {
               log().info("Unknown event: {} {}", event, data);
               return stay();
-            })
+            })*/
     );
 
     when(MyFsmState.DONE,
@@ -65,23 +70,18 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
               worker.tell(new Status.Success("I finished!"), self());
               return stop();
             })
-            .anyEvent((event, data) -> {
+            /*.anyEvent((event, data) -> {
               log().info("Unknown event: {} {}", event, data);
               return stay();
-            })
+            })*/
     );
 
+    whenUnhandled(matchAnyEvent((event, data) -> stay().andThen(exec(d -> log().warning("Unhandled event received {}", event)))));
 
     onTransition(
-            matchState(MyFsmState.IDLE, MyFsmState.STEP_1, () -> {
-              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
-            })
-            .state(MyFsmState.STEP_1, MyFsmState.STEP_2, () -> {
-              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
-            })
-            .state(MyFsmState.STEP_2, MyFsmState.DONE, () -> {
-              log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
-            })
+      matchState(MyFsmState.IDLE, MyFsmState.STEP_1, this::logTransition)
+        .state(MyFsmState.STEP_1, MyFsmState.STEP_2, this::logTransition)
+        .state(MyFsmState.STEP_2, MyFsmState.DONE, this::logTransition)
     );
   }
 
@@ -121,4 +121,7 @@ public class MyPersistentFsm extends AbstractPersistentFSM<MyFsmState, MyFsmData
   }
 
 
+  private void logTransition() {
+    log().info("Transition: stateName: {} stateData(): {} nextStateData(): {}", stateName(), stateData(), nextStateData());
+  }
 }

@@ -1,16 +1,17 @@
 package com.hogly.pocs;
 
+import akka.Done;
 import akka.actor.AbstractLoggingActor;
 
 public class AggregateActor extends AbstractLoggingActor {
 
   @Override
-  public void preStart() throws Exception {
+  public void preStart() {
     log().info("Starting");
   }
 
   @Override
-  public void postStop() throws Exception {
+  public void postStop() {
     log().info("Stopping");
   }
 
@@ -23,6 +24,7 @@ public class AggregateActor extends AbstractLoggingActor {
 
   private void handleMessage(Object msg) {
     log().info("I´m handling: {} from: {}", msg, sender());
+    sender().tell(Done.getInstance(), self());
   }
 
 }
