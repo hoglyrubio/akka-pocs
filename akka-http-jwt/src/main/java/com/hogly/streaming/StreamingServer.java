@@ -71,7 +71,7 @@ public class StreamingServer extends AllDirectives {
       .map(value -> new MyRecord(value, UUID.randomUUID().toString()))
       .limit(1000)
       .iterator());
-    return completeOKWithSource(source, compensationMarshaller, entityStreamingSupport);
+      return completeOKWithSource(source, compensationMarshaller, entityStreamingSupport);
   }
 
   private <T> T sleep(T value) {

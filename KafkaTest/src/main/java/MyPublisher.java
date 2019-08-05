@@ -1,19 +1,30 @@
 import java.util.Properties;
 import java.util.concurrent.*;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import akka.Done;
+import akka.actor.ActorSystem;
+import akka.stream.ActorMaterializer;
+import akka.stream.javadsl.Sink;
+import akka.stream.javadsl.Source;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
 public class MyPublisher {
 
-  public static final String BOOTSTRAP_SERVERS = "10.28.13.14:9583,10.28.12.62:9893,10.28.13.127:9180";
+  public static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
-  public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
+  public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
+    ActorSystem system = ActorSystem.create();
+
     KafkaProducer<String, String> kafkaProducer = kafkaProducer(BOOTSTRAP_SERVERS);
-    RecordMetadata rm = publish(kafkaProducer, "my-topic", "my-key", "my-message").toCompletableFuture()
-        .get(5, TimeUnit.SECONDS);
-    System.out.println("Partition: " + rm.partition() + " Offset: " + rm.offset() + " topic: " + rm.topic());
+    CompletionStage<Done> result = Source.range(4001, 5000)
+      .mapAsync(10, i -> publish(kafkaProducer, "my-topic", "key-" + i, "message-" + i))
+      .runForeach(recordMetadata -> system.log().info("{} {}", recordMetadata.partition(), recordMetadata.offset()), ActorMaterializer.create(system));
+
+    result.toCompletableFuture().get(10, TimeUnit.SECONDS);
   }
 
   public static CompletionStage<RecordMetadata> publish(KafkaProducer<String, String> kafkaProducer, String topic, String key, String message) {

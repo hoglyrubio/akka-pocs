@@ -19,11 +19,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.lightbend.akka</groupId>
-      <artifactId>akka-diagnostics_2.11</artifactId>
-      <version>LATEST</version>
-    </dependency>
-    <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-actor_2.11</artifactId>
       <version>${akka.version}</version>
@@ -110,6 +105,11 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
     </dependency>
   </dependencies>
