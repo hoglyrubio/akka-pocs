@@ -1,0 +1,215 @@
+{
+  "start-time" : "2019-04-17T15:23:10.109",
+  "akka-version" : "Unknown RP version, based on 2.5.22",
+  "classpath" : "/Applications/IntelliJ%20IDEA%20CE.app/Contents/lib/idea_rt.jar:/Applications/IntelliJ%20IDEA%20CE.app/Contents/plugins/junit/lib/junit-rt.jar:/Applications/IntelliJ%20IDEA%20CE.app/Contents/plugins/junit/lib/junit5-rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/deploy.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/jaccess.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/jfxrt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/javaws.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jfxswt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/plugin.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/ant-javafx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/javafx-mx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/packager.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/tools.jar:/Users/hoglyrubio/Trabajo/workspace/akka-pocs/akka-http-jwt/target/test-classes/:/Users/hoglyrubio/Trabajo/workspace/akka-pocs/akka-http-jwt/target/classes/:/Users/hoglyrubio/.m2/repository/com/lightbend/akka/akka-diagnostics_2.11/1.1.4/akka-diagnostics_2.11-1.1.4.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12.jar:/Users/hoglyrubio/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-actor_2.11/2.5.22/akka-actor_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/config/1.3.3/config-1.3.3.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.11/0.7.0/scala-java8-compat_2.11-0.7.0.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http_2.11/10.1.8/akka-http_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http-core_2.11/10.1.8/akka-http-core_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-parsing_2.11/10.1.8/akka-parsing_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-stream_2.11/2.5.22/akka-stream_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-protobuf_2.11/2.5.22/akka-protobuf_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/ssl-config-core_2.11/0.3.7/ssl-config-core_2.11-0.3.7.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-slf4j_2.11/2.5.22/akka-slf4j_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/auth0/java-jwt/3.3.0/java-jwt-3.3.0.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.2/jackson-databind-2.9.2.jar:/Users/hoglyrubio/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/Users/hoglyrubio/.m2/repository/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar:/Users/hoglyrubio/.m2/repository/ch/qos/logback/logback-core/1.1.7/logback-core-1.1.7.jar:/Users/hoglyrubio/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-testkit_2.11/2.5.22/akka-testkit_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http-testkit_2.11/10.1.8/akka-http-testkit_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/hoglyrubio/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/hoglyrubio/.m2/repository/org/scalatest/scalatest_2.11/3.0.0/scalatest_2.11-3.0.0.jar:/Users/hoglyrubio/.m2/repository/org/scalactic/scalactic_2.11/3.0.0/scalactic_2.11-3.0.0.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/scala-reflect/2.11.8/scala-reflect-2.11.8.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http-jackson_2.11/10.1.8/akka-http-jackson_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.8.6/jackson-datatype-jdk8-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.8.6/jackson-datatype-jsr310-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.8.6/jackson-module-parameter-names-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.8.6/jackson-annotations-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.8.6/jackson-core-2.8.6.jar:/Applications/IntelliJ%20IDEA%20CE.app/Contents/lib/idea_rt.jar",
+  "configuration-warnings" : [],
+  "system-metrics" : {
+    "heap-init" : 134217728,
+    "heap-max" : 1908932608,
+    "heap-used" : 124388272,
+    "heap-committed" : 175112192,
+    "os-processors" : 4,
+    "mem-pool-0" : {
+      "name" : "Code Cache",
+      "type" : "Non-heap memory",
+      "init" : 2555904,
+      "max" : 251658240,
+      "used" : 6653120,
+      "committed" : 6750208
+    },
+    "mem-pool-1" : {
+      "name" : "Metaspace",
+      "type" : "Non-heap memory",
+      "init" : 0,
+      "max" : -1,
+      "used" : 34334600,
+      "committed" : 34865152
+    },
+    "mem-pool-2" : {
+      "name" : "Compressed Class Space",
+      "type" : "Non-heap memory",
+      "init" : 0,
+      "max" : 1073741824,
+      "used" : 4841312,
+      "committed" : 4980736
+    },
+    "mem-pool-3" : {
+      "name" : "PS Eden Space",
+      "type" : "Heap memory",
+      "init" : 34078720,
+      "max" : 698875904,
+      "used" : 107598552,
+      "committed" : 110100480
+    },
+    "mem-pool-4" : {
+      "name" : "PS Survivor Space",
+      "type" : "Heap memory",
+      "init" : 5242880,
+      "max" : 7864320,
+      "used" : 7856976,
+      "committed" : 7864320
+    },
+    "mem-pool-5" : {
+      "name" : "PS Old Gen",
+      "type" : "Heap memory",
+      "init" : 89653248,
+      "max" : 1431830528,
+      "used" : 8932744,
+      "committed" : 57147392
+    }
+  },
+  "configuration" : {
+    "akka" : {
+        "actor" : {
+            "debug" : {
+                "lifecycle" : "off"
+            }
+        },
+        "http" : {
+            "version" : "10.1.8"
+        },
+        "loggers" : [
+            "akka.event.slf4j.Slf4jLogger"
+        ],
+        "logging-filter" : "akka.event.slf4j.Slf4jLoggingFilter",
+        "loglevel" : "DEBUG",
+        "version" : "2.5.22"
+    },
+    "awt" : {
+        "toolkit" : "sun.lwawt.macosx.LWCToolkit"
+    },
+    "excluded-sensitive-paths" : [
+        "user.home",
+        "ftp.nonProxyHosts",
+        "user.dir",
+        "http.nonProxyHosts",
+        "socksNonProxyHosts",
+        "user.name"
+    ],
+    "file" : {
+        "encoding" : {
+            "pkg" : "sun.io"
+        },
+        "separator" : "/"
+    },
+    "ftp" : {},
+    "gopherProxySet" : "false",
+    "http" : {},
+    "idea" : {
+        "test" : {
+            "cyclic" : {
+                "buffer" : {
+                    "size" : "1048576"
+                }
+            }
+        }
+    },
+    "java" : {
+        "awt" : {
+            "graphicsenv" : "sun.awt.CGraphicsEnvironment",
+            "printerjob" : "sun.lwawt.macosx.CPrinterJob"
+        },
+        "class" : {
+            "path" : "/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar:/Applications/IntelliJ IDEA CE.app/Contents/plugins/junit/lib/junit-rt.jar:/Applications/IntelliJ IDEA CE.app/Contents/plugins/junit/lib/junit5-rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/deploy.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/jaccess.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/jfxrt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/javaws.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jfxswt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/plugin.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/ant-javafx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/javafx-mx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/packager.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/lib/tools.jar:/Users/hoglyrubio/Trabajo/workspace/akka-pocs/akka-http-jwt/target/test-classes:/Users/hoglyrubio/Trabajo/workspace/akka-pocs/akka-http-jwt/target/classes:/Users/hoglyrubio/.m2/repository/com/lightbend/akka/akka-diagnostics_2.11/1.1.4/akka-diagnostics_2.11-1.1.4.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/scala-library/2.11.12/scala-library-2.11.12.jar:/Users/hoglyrubio/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-actor_2.11/2.5.22/akka-actor_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/config/1.3.3/config-1.3.3.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.11/0.7.0/scala-java8-compat_2.11-0.7.0.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http_2.11/10.1.8/akka-http_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http-core_2.11/10.1.8/akka-http-core_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-parsing_2.11/10.1.8/akka-parsing_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-stream_2.11/2.5.22/akka-stream_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-protobuf_2.11/2.5.22/akka-protobuf_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/ssl-config-core_2.11/0.3.7/ssl-config-core_2.11-0.3.7.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-slf4j_2.11/2.5.22/akka-slf4j_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/auth0/java-jwt/3.3.0/java-jwt-3.3.0.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.2/jackson-databind-2.9.2.jar:/Users/hoglyrubio/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/Users/hoglyrubio/.m2/repository/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar:/Users/hoglyrubio/.m2/repository/ch/qos/logback/logback-core/1.1.7/logback-core-1.1.7.jar:/Users/hoglyrubio/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-testkit_2.11/2.5.22/akka-testkit_2.11-2.5.22.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http-testkit_2.11/10.1.8/akka-http-testkit_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/hoglyrubio/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/hoglyrubio/.m2/repository/org/scalatest/scalatest_2.11/3.0.0/scalatest_2.11-3.0.0.jar:/Users/hoglyrubio/.m2/repository/org/scalactic/scalactic_2.11/3.0.0/scalactic_2.11-3.0.0.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/scala-reflect/2.11.8/scala-reflect-2.11.8.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/modules/scala-xml_2.11/1.0.5/scala-xml_2.11-1.0.5.jar:/Users/hoglyrubio/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4.jar:/Users/hoglyrubio/.m2/repository/com/typesafe/akka/akka-http-jackson_2.11/10.1.8/akka-http-jackson_2.11-10.1.8.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.8.6/jackson-datatype-jdk8-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.8.6/jackson-datatype-jsr310-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.8.6/jackson-module-parameter-names-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.8.6/jackson-annotations-2.8.6.jar:/Users/hoglyrubio/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.8.6/jackson-core-2.8.6.jar:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar",
+            "version" : "52.0"
+        },
+        "endorsed" : {
+            "dirs" : "/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/endorsed"
+        },
+        "ext" : {
+            "dirs" : "/Users/hoglyrubio/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java"
+        },
+        "home" : "/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre",
+        "io" : {
+            "tmpdir" : "/var/folders/52/50pr3r9n2zs_dx0vrm0xr5sh0000gn/T/"
+        },
+        "library" : {
+            "path" : "/Users/hoglyrubio/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."
+        },
+        "runtime" : {
+            "name" : "Java(TM) SE Runtime Environment",
+            "version" : "1.8.0_131-b11"
+        },
+        "specification" : {
+            "name" : "Java Platform API Specification",
+            "vendor" : "Oracle Corporation",
+            "version" : "1.8"
+        },
+        "vendor" : {
+            "url" : {
+                "bug" : "http://bugreport.sun.com/bugreport/"
+            }
+        },
+        "version" : "1.8.0_131",
+        "vm" : {
+            "info" : "mixed mode",
+            "name" : "Java HotSpot(TM) 64-Bit Server VM",
+            "specification" : {
+                "name" : "Java Virtual Machine Specification",
+                "vendor" : "Oracle Corporation",
+                "version" : "1.8"
+            },
+            "vendor" : "Oracle Corporation",
+            "version" : "25.131-b11"
+        }
+    },
+    "line" : {
+        "separator" : "\n"
+    },
+    "os" : {
+        "arch" : "x86_64",
+        "name" : "Mac OS X",
+        "version" : "10.13.6"
+    },
+    "path" : {
+        "separator" : ":"
+    },
+    "sun" : {
+        "arch" : {
+            "data" : {
+                "model" : "64"
+            }
+        },
+        "boot" : {
+            "class" : {
+                "path" : "/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/classes"
+            },
+            "library" : {
+                "path" : "/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home/jre/lib"
+            }
+        },
+        "cpu" : {
+            "endian" : "little",
+            "isalist" : ""
+        },
+        "io" : {
+            "unicode" : {
+                "encoding" : "UnicodeBig"
+            }
+        },
+        "java" : {
+            "command" : "com.intellij.rt.execution.junit.JUnitStarter -ideVersion5 -junit4 com.hogly.jwt.AppTest",
+            "launcher" : "SUN_STANDARD"
+        },
+        "jnu" : {
+            "encoding" : "UTF-8"
+        },
+        "management" : {
+            "compiler" : "HotSpot 64-Bit Tiered Compilers"
+        },
+        "os" : {
+            "patch" : {
+                "level" : "unknown"
+            }
+        }
+    },
+    "user" : {
+        "country" : {
+            "format" : "CO"
+        },
+        "language" : "es",
+        "timezone" : "America/Bogota"
+    }
+}
+}
+

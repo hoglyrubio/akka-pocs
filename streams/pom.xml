@@ -12,11 +12,17 @@
   <artifactId>streams</artifactId>
 
   <properties>
-    <akka.version>2.5.9</akka.version>
-    <jackson.version>2.8.6</jackson.version>
+    <akka.version>2.5.22</akka.version>
+    <jackson.version>2.9.8</jackson.version>
+    <akka-diagnostics.version>1.1.4</akka-diagnostics.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.lightbend.akka</groupId>
+      <artifactId>akka-diagnostics_2.11</artifactId>
+      <version>${akka-diagnostics.version}</version>
+    </dependency>
     <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-actor_2.11</artifactId>

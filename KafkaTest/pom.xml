@@ -11,6 +11,10 @@
 
   <artifactId>KafkaTest</artifactId>
 
+  <properties>
+    <kafka.version>0.10.0.0</kafka.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.typesafe.akka</groupId>
@@ -20,12 +24,12 @@
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka_2.11</artifactId>
-      <version>0.11.0.1</version>
+      <version>${kafka.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
-      <version>0.11.0.1</version>
+      <version>${kafka.version}</version>
     </dependency>
   </dependencies>
 

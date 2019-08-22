@@ -12,7 +12,7 @@
   <artifactId>ldap</artifactId>
 
   <properties>
-    <akka.version>2.5.9</akka.version>
+    <akka.version>2.5.22</akka.version>
   </properties>
 
   <dependencies>
