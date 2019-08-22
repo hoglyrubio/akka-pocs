@@ -24,6 +24,7 @@
     <module>ssl-tests</module>
     <module>streams</module>
     <module>akkaTyped</module>
+    <module>ElasticCapacity</module>
   </modules>
 
   <properties>
