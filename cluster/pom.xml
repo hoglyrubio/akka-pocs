@@ -12,8 +12,9 @@
   <artifactId>cluster</artifactId>
 
   <properties>
-    <akka.version>2.5.22</akka.version>
+    <akka.version>2.5.9</akka.version>
     <jackson.version>2.8.6</jackson.version>
+    <akka-http.version>10.1.8</akka-http.version>
   </properties>
 
   <dependencies>
@@ -38,6 +39,46 @@
       <version>${akka.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-http_2.11</artifactId>
+      <version>${akka-http.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-http-jackson_2.11</artifactId>
+      <version>${akka-http.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jdk8</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-parameter-names</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.1.7</version>
@@ -57,10 +98,17 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.4</version>
     </dependency>
+    <!-- Test -->
     <dependency>
       <groupId>com.typesafe.akka</groupId>
       <artifactId>akka-testkit_2.11</artifactId>
       <version>${akka.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-http-testkit_2.11</artifactId>
+      <version>${akka-http.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -1,4 +1,4 @@
-package com.hogly.pocs;
+package com.hogly.cluster.listener;
 
 import akka.Done;
 import akka.actor.ActorRef;
@@ -11,6 +11,9 @@ import akka.cluster.singleton.ClusterSingletonManager;
 import akka.cluster.singleton.ClusterSingletonManagerSettings;
 import akka.cluster.singleton.ClusterSingletonProxy;
 import akka.cluster.singleton.ClusterSingletonProxySettings;
+import com.hogly.cluster.entities.AggregateActor;
+import com.hogly.cluster.entities.AggregateId;
+import com.hogly.cluster.entities.AggregateMessage;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import scala.concurrent.duration.FiniteDuration;

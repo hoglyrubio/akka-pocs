@@ -1,9 +1,12 @@
-package com.hogly.pocs;
+package com.hogly.cluster.entities;
 
 import akka.Done;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.testkit.javadsl.TestKit;
+import com.hogly.cluster.entities.ClusterShardingApp;
+import com.hogly.cluster.entities.AggregateId;
+import com.hogly.cluster.entities.AggregateMessage;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigValueFactory;
@@ -16,7 +19,7 @@ import scala.concurrent.duration.FiniteDuration;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class AggregateClusterShardingTest {
+public class ClusterShardingAppTest {
 
 
   public static final FiniteDuration TIMEOUT = FiniteDuration.create(1, TimeUnit.MINUTES);
@@ -59,8 +62,8 @@ public class AggregateClusterShardingTest {
   public void testingASingleActorCluster() {
     new TestKit(systemNodeA) {
       {
-        ActorRef actorInNodeA = AggregateClusterSharding.start(systemNodeA, 2);
-        ActorRef actorInNodeB = AggregateClusterSharding.start(systemNodeB, 2);
+        ActorRef actorInNodeA = ClusterShardingApp.start(systemNodeA, 2);
+        ActorRef actorInNodeB = ClusterShardingApp.start(systemNodeB, 2);
 
         for (int i = 0; i < 20; i++) {
           send(actorInNodeA, aMessage()); expectMsg(TIMEOUT, Done.getInstance());

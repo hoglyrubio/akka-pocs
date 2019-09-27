@@ -1,4 +1,4 @@
-package com.hogly.pocs;
+package com.hogly.cluster.entities;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -15,7 +15,7 @@ import scala.concurrent.duration.FiniteDuration;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class AggregateClusterSharding {
+public class ClusterShardingApp {
 
   public static void main(String[] args) {
 

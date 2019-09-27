@@ -1,4 +1,4 @@
-package com.hogly.pocs;
+package com.hogly.cluster.listener;
 
 import akka.actor.AbstractLoggingActor;
 import akka.cluster.Cluster;

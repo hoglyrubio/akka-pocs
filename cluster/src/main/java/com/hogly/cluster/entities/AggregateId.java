@@ -1,4 +1,4 @@
-package com.hogly.pocs;
+package com.hogly.cluster.entities;
 
 import java.io.Serializable;
 import java.util.UUID;
