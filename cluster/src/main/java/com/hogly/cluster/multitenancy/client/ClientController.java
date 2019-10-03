@@ -1,4 +1,4 @@
-package com.hogly.cluster.multitenancy;
+package com.hogly.cluster.multitenancy.client;
 
 import akka.NotUsed;
 import akka.actor.ActorSystem;
@@ -15,18 +15,24 @@ import com.typesafe.config.Config;
 
 import java.util.concurrent.CompletionStage;
 
-public class AdminDirectives extends AllDirectives {
+import static akka.http.javadsl.server.PathMatchers.segment;
+
+public class ClientController extends AllDirectives {
 
   private final ActorSystem system;
   private final Http http;
   private final ConnectHttp connect;
   private final ActorMaterializer materializer;
+  private final String host;
+  private final int port;
 
-  public AdminDirectives(ActorSystem system, Config config) {
+  public ClientController(ActorSystem system, Config httpConfig) {
     this.system = system;
     this.http = Http.get(system);
     this.materializer = ActorMaterializer.create(system);
-    this.connect = ConnectHttp.toHost(config.getString("host"), config.getInt("port"));
+    this.host = httpConfig.getString("host");
+    this.port = httpConfig.getInt("port");
+    this.connect = ConnectHttp.toHost(host, port);
   }
 
   public CompletionStage<ServerBinding> start() {
@@ -35,7 +41,12 @@ public class AdminDirectives extends AllDirectives {
   }
 
   private Route createRoute() {
-    return get(() -> path("admin", () -> complete("OK")));
+    return route(
+      pathPrefix(segment("api").slash("client"),
+        () -> route(
+          get(() -> complete(system.name() + " on " + host + ":" + port)))
+        )
+    );
   }
 
 }
