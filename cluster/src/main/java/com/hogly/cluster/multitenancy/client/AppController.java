@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 
 import static akka.http.javadsl.server.PathMatchers.segment;
 
-public class ClientController extends AllDirectives {
+public class AppController extends AllDirectives {
 
   private final ActorSystem system;
   private final Http http;
@@ -26,7 +26,7 @@ public class ClientController extends AllDirectives {
   private final String host;
   private final int port;
 
-  public ClientController(ActorSystem system, Config httpConfig) {
+  public AppController(ActorSystem system, Config httpConfig) {
     this.system = system;
     this.http = Http.get(system);
     this.materializer = ActorMaterializer.create(system);

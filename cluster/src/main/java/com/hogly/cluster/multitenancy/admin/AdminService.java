@@ -2,7 +2,6 @@ package com.hogly.cluster.multitenancy.admin;
 
 import akka.actor.ActorSystem;
 import akka.actor.Terminated;
-import com.hogly.cluster.multitenancy.client.ClientDescriptor;
 
 import java.util.Collection;
 import java.util.Map;
@@ -12,38 +11,38 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AdminService {
 
-  private final Map<String, ClientDescriptor> currentClients;
+  private final Map<String, ApplicationInstanceDescriptor> currentApplicationInstances;
 
   public AdminService(ActorSystem actorSystem) {
-    this.currentClients = new ConcurrentHashMap<>();
+    this.currentApplicationInstances = new ConcurrentHashMap<>();
   }
 
-  public CompletionStage<ClientDescriptor> createClient(CreateClient command) {
-    if (currentClients.containsKey(command.id())) {
+  public CompletionStage<ApplicationInstanceDescriptor> createClient(CreateApplicationInstance command) {
+    if (currentApplicationInstances.containsKey(command.id())) {
       throw new IllegalArgumentException("Client " + command.id() + " already exists");
     }
-    return ClientDescriptor.create(command)
-      .thenApply(clientDescriptor -> currentClients.put(command.id(), clientDescriptor));
+    return ApplicationInstanceDescriptor.create(command)
+      .thenApply(applicationInstanceDescriptor -> currentApplicationInstances.put(command.id(), applicationInstanceDescriptor));
   }
 
   public CompletionStage<Terminated> deleteClient(String clientId) {
-    if (currentClients.containsKey(clientId)) {
-      return currentClients.get(clientId).terminate()
+    if (currentApplicationInstances.containsKey(clientId)) {
+      return currentApplicationInstances.get(clientId).terminate()
         .thenApply(terminated -> {
-          currentClients.remove(clientId);
+          currentApplicationInstances.remove(clientId);
           return terminated;
         });
     }
     throw new IllegalArgumentException("Client " + clientId + " does not exist");
   }
 
-  public CompletionStage<Collection<ClientDescriptor>> getClients() {
-    return CompletableFuture.completedFuture(currentClients.values());
+  public CompletionStage<Collection<ApplicationInstanceDescriptor>> getClients() {
+    return CompletableFuture.completedFuture(currentApplicationInstances.values());
   }
 
   public CompletionStage<Object> getClient(String clientId) {
-    if (currentClients.containsKey(clientId)) {
-      return CompletableFuture.completedFuture(currentClients.get(clientId));
+    if (currentApplicationInstances.containsKey(clientId)) {
+      return CompletableFuture.completedFuture(currentApplicationInstances.get(clientId));
     }
     throw new IllegalArgumentException("Client " + clientId + " does not exist");
   }

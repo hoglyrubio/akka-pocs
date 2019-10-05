@@ -11,7 +11,6 @@ import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.StatusCodes;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.ExceptionHandler;
-import akka.http.javadsl.server.ExceptionHandlerBuilder;
 import akka.http.javadsl.server.RejectionHandler;
 import akka.http.javadsl.server.Route;
 import akka.http.javadsl.server.ValidationRejection;
@@ -23,7 +22,6 @@ import com.hogly.cluster.multitenancy.MarshallingUtils;
 import com.typesafe.config.Config;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 
 import static akka.http.javadsl.server.PathMatchers.segment;
 
@@ -34,7 +32,7 @@ public class AdminController extends AllDirectives {
   private final ConnectHttp connect;
   private final AdminService adminService;
   private final ActorMaterializer materializer;
-  private final Unmarshaller<HttpEntity, CreateClient> createAdminUnMarshaller;
+  private final Unmarshaller<HttpEntity, CreateApplicationInstance> createAdminUnMarshaller;
 
   public AdminController(ActorSystem system, Config config, AdminService adminService) {
     this.system = system;
@@ -42,7 +40,7 @@ public class AdminController extends AllDirectives {
     this.materializer = ActorMaterializer.create(system);
     this.connect = ConnectHttp.toHost(config.getString("host"), config.getInt("port"));
     this.adminService = adminService;
-    this.createAdminUnMarshaller = MarshallingUtils.jsonUnMarshaller(CreateClient.class);
+    this.createAdminUnMarshaller = MarshallingUtils.jsonUnMarshaller(CreateApplicationInstance.class);
   }
 
   public CompletionStage<ServerBinding> start() {
@@ -80,7 +78,7 @@ public class AdminController extends AllDirectives {
       .build();
   }
 
-  private Route createClient(CreateClient command) {
+  private Route createClient(CreateApplicationInstance command) {
     CompletionStage<HttpResponse> response = adminService.createClient(command)
       .thenApply(serverBinding -> DirectiveUtils.TextPlainHttpResponse(StatusCodes.CREATED, command.id()));
     return completeWithFuture(response);
