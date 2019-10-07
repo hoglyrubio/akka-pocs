@@ -1,4 +1,4 @@
-package com.hogly.cluster.multitenancy.admin;
+package com.hogly.cluster.multitenancy.instance;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

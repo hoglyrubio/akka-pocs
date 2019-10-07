@@ -19,6 +19,7 @@ import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import com.hogly.cluster.multitenancy.DirectiveUtils;
 import com.hogly.cluster.multitenancy.MarshallingUtils;
+import com.hogly.cluster.multitenancy.instance.CreateApplicationInstance;
 import com.typesafe.config.Config;
 
 import java.util.concurrent.CompletionStage;

@@ -1,4 +1,4 @@
-package com.hogly.cluster.multitenancy;
+package com.hogly.cluster.multitenancy.instance;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

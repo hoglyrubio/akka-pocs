@@ -12,7 +12,7 @@ public class App {
     Config adminConfig = ConfigFactory.load("multitenancy-admin.conf");
     ActorSystem adminSystem = ActorSystem.create("ADMIN", adminConfig);
 
-    AdminService adminService = new AdminService(adminSystem);
+    AdminService adminService = new AdminService();
     AdminController adminController = new AdminController(adminSystem, adminConfig.getConfig("multitenancy.http"), adminService);
     adminController.start();
   }
