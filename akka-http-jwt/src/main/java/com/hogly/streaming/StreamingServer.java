@@ -6,6 +6,8 @@ import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.common.EntityStreamingSupport;
+import akka.http.javadsl.common.JsonEntityStreamingSupport;
+import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.marshalling.Marshaller;
 import akka.http.javadsl.model.ContentType;
 import akka.http.javadsl.model.ContentTypes;
@@ -15,9 +17,11 @@ import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.RequestEntity;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
+import akka.http.javadsl.unmarshalling.Unmarshaller;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import akka.stream.javadsl.Source;
+import akka.util.ByteString;
 
 import java.util.Random;
 import java.util.UUID;
@@ -59,9 +63,24 @@ public class StreamingServer extends AllDirectives {
   }
 
   private Route createRoute() {
-    return route(
-      get(() -> path("random", () -> randomNumbers()))
-    );
+    final Unmarshaller<ByteString, MyRecord> myRecordUnmarshaller = Jackson.byteStringUnmarshaller(MyRecord.class);
+
+    Route route1 = path("assignments", () -> post(() -> extractMaterializer(mat -> {
+      final JsonEntityStreamingSupport jsonSupport = EntityStreamingSupport.json();
+      return entityAsSourceOf(myRecordUnmarshaller, jsonSupport, sourceOfMyRecords -> {
+        CompletionStage<Integer> myRecordCount = sourceOfMyRecords
+          .map(mr -> {
+            system.log().info("Received: {}", mr);
+            return mr;
+          })
+          .runFold(0, (acc, myRecord) -> acc + 1, mat);
+        return onComplete(myRecordCount, c -> complete("Total of records received: " + c));
+      });
+    })));
+
+    Route route2 = get(() -> path("random", () -> randomNumbers()));
+
+    return concat(route1, route2);
   }
 
   private Route randomNumbers() {
