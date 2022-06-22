@@ -15,7 +15,7 @@
     <java.version>1.8</java.version>
     <akka.version>2.5.23</akka.version>
     <elasticsearch.rest.version>5.6.16</elasticsearch.rest.version>
-    <elasticsearch-rest-client.version>6.3.1</elasticsearch-rest-client.version>
+    <elasticsearch-rest-client.version>6.8.15</elasticsearch-rest-client.version>
     <akka-stream-alpakka-elasticsearch.version>1.1.0</akka-stream-alpakka-elasticsearch.version>
   </properties>
 
